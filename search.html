@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Student</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:wght@600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --deep: #0b3b3c;
+            --teal: #0f9b8e;
+            --teal-dark: #0b7a70;
+            --amber: #ffb547;
+            --text: #17302f;
+            --muted: #6b7f7e;
+            --line: #d5e0de;
+            --page: #f1f5f4;
+            --white: #ffffff;
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            min-height: 100vh;
+            font-family: "DM Sans", "Segoe UI", Arial, sans-serif;
+            color: var(--text);
+            background: var(--page);
+            line-height: 1.55;
+            overflow-x: hidden;
+        }
+
+        .topbar {
+            background: var(--deep);
+            color: #fff;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .brand {
+            font-family: "Fraunces", Georgia, serif;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .topbar a {
+            color: #cfeeea;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(207, 238, 234, 0.4);
+        }
+
+        .topbar a:hover { color: #fff; border-color: #fff; }
+        .topbar a:focus-visible { outline: 3px solid var(--amber); outline-offset: 4px; }
+
+        .page {
+            min-height: calc(100vh - 57px);
+            padding: 40px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            padding: 38px 34px 34px;
+            background: var(--white);
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            box-shadow: 0 22px 44px rgba(11, 59, 60, 0.1);
+        }
+
+        .icon {
+            width: 56px;
+            height: 56px;
+            margin: 0 auto 18px;
+            display: grid;
+            place-items: center;
+            border-radius: 16px;
+            background: var(--amber);
+            color: var(--deep);
+        }
+
+        .icon svg { width: 26px; height: 26px; }
+
+        h2 {
+            text-align: center;
+            font-family: "Fraunces", Georgia, serif;
+            font-size: clamp(24px, 4vw, 30px);
+            line-height: 1.2;
+            letter-spacing: -0.4px;
+        }
+
+        form {
+            margin-top: 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        label { font-size: 13.5px; font-weight: 600; }
+        label b { font-weight: 600; }
+
+        input {
+            width: 100%;
+            height: 48px;
+            padding: 0 14px;
+            border: 1.5px solid var(--line);
+            border-radius: 8px;
+            background: #fff;
+            color: var(--text);
+            font: inherit;
+            font-size: 15px;
+            outline: none;
+            transition: border-color .15s, box-shadow .15s;
+        }
+
+        input::placeholder { color: #9db0ae; }
+        input:hover { border-color: #aebfbc; }
+
+        input:focus {
+            border-color: var(--teal);
+            box-shadow: 0 0 0 4px rgba(15, 155, 142, 0.16);
+        }
+
+        button {
+            width: 100%;
+            height: 52px;
+            margin-top: 16px;
+            border: 0;
+            border-radius: 8px;
+            background: var(--teal);
+            color: #fff;
+            font: inherit;
+            font-size: 15.5px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background .15s, transform .15s;
+        }
+
+        button:hover { background: var(--teal-dark); }
+        button:active { transform: scale(0.99); }
+        button:focus-visible { outline: 3px solid var(--amber); outline-offset: 3px; }
+
+        @media (max-width: 600px) {
+            .topbar { padding: 14px 16px; }
+            .page { padding: 20px 12px; align-items: flex-start; }
+            .container { padding: 28px 20px 24px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+    </style>
+</head>
+
+<body>
+
+    <header class="topbar">
+        <span class="brand">Student Portal</span>
+        <a href="index.html">Register student</a>
+    </header>
+
+    <main class="page">
+        <div class="container">
+
+            <div class="icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+                    <circle cx="11" cy="11" r="6.5"></circle>
+                    <path d="M16 16l5 5"></path>
+                </svg>
+            </div>
+
+            <h2>Search Student Details</h2>
+
+            <form action="search.php" method="GET">
+
+                <label for="studentid"><b>Student ID</b></label>
+
+                <input
+                    type="number"
+                    id="studentid"
+                    name="studentid"
+                    placeholder="Enter Student ID"
+                    required>
+
+                <button type="submit">
+                    Search
+                </button>
+
+            </form>
+        </div>
+    </main>
+
+</body>
+</html>

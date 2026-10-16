@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:wght@600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --deep: #0b3b3c;
+            --teal: #0f9b8e;
+            --teal-dark: #0b7a70;
+            --amber: #ffb547;
+            --text: #17302f;
+            --muted: #6b7f7e;
+            --line: #d5e0de;
+            --page: #f1f5f4;
+            --white: #ffffff;
+            --error: #c93a3a;
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            min-height: 100vh;
+            font-family: "DM Sans", "Segoe UI", Arial, sans-serif;
+            color: var(--text);
+            background: var(--page);
+            line-height: 1.55;
+            overflow-x: hidden;
+        }
+
+        /* ===== Top bar ===== */
+        .topbar {
+            background: var(--deep);
+            color: #fff;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .brand {
+            font-family: "Fraunces", Georgia, serif;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .topbar a {
+            color: #cfeeea;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(207, 238, 234, 0.4);
+        }
+
+        .topbar a:hover { color: #fff; border-color: #fff; }
+        .topbar a:focus-visible { outline: 3px solid var(--amber); outline-offset: 4px; }
+
+        /* ===== Layout ===== */
+        .layout {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 40px 24px 56px;
+            display: grid;
+            grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+            gap: 40px;
+            align-items: start;
+        }
+
+        .title h1 {
+            font-family: "Fraunces", Georgia, serif;
+            font-size: clamp(28px, 3.4vw, 38px);
+            line-height: 1.15;
+            letter-spacing: -0.5px;
+        }
+
+        .title p {
+            margin: 8px 0 28px;
+            color: var(--muted);
+            max-width: 52ch;
+        }
+
+        /* ===== Form ===== */
+        form {
+            background: var(--white);
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            padding: 30px;
+        }
+
+        fieldset { border: 0; min-width: 0; }
+        fieldset + fieldset { margin-top: 26px; }
+
+        legend {
+            width: 100%;
+            margin-bottom: 14px;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--teal-dark);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .field { min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+        .full { grid-column: 1 / -1; }
+
+        label { font-size: 13.5px; font-weight: 600; }
+
+        input, select {
+            width: 100%;
+            min-width: 0;
+            height: 46px;
+            padding: 0 13px;
+            border: 1.5px solid var(--line);
+            border-radius: 8px;
+            background: #fff;
+            color: var(--text);
+            font: inherit;
+            font-size: 14.5px;
+            outline: none;
+            transition: border-color .15s, box-shadow .15s;
+        }
+
+        input::placeholder { color: #9db0ae; }
+        input:hover, select:hover { border-color: #aebfbc; }
+
+        input:focus, select:focus {
+            border-color: var(--teal);
+            box-shadow: 0 0 0 4px rgba(15, 155, 142, 0.16);
+        }
+
+        input:not(:placeholder-shown):invalid {
+            border-color: var(--error);
+            box-shadow: 0 0 0 4px rgba(201, 58, 58, 0.1);
+        }
+
+        .phone { display: flex; gap: 10px; }
+        .phone select { flex: 0 0 92px; cursor: pointer; }
+        .phone input { flex: 1; }
+
+        .hint { font-size: 12px; color: var(--muted); }
+
+        .submit {
+            width: 100%;
+            height: 52px;
+            margin-top: 28px;
+            border: 0;
+            border-radius: 8px;
+            background: var(--teal);
+            color: #fff;
+            font: inherit;
+            font-size: 15.5px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background .15s, transform .15s;
+        }
+
+        .submit:hover { background: var(--teal-dark); }
+        .submit:active { transform: scale(0.99); }
+        .submit:focus-visible { outline: 3px solid var(--amber); outline-offset: 3px; }
+
+        /* ===== Live ID card ===== */
+        .preview { position: sticky; top: 24px; }
+
+        .preview-label {
+            margin-bottom: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--muted);
+        }
+
+        .id-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 18px;
+            background: linear-gradient(155deg, var(--deep) 0%, #116b66 100%);
+            color: #fff;
+            padding: 26px 26px 24px;
+            box-shadow: 0 22px 44px rgba(11, 59, 60, 0.28);
+        }
+
+        .id-card::after {
+            content: "";
+            position: absolute;
+            right: -60px;
+            bottom: -60px;
+            width: 190px;
+            height: 190px;
+            border-radius: 50%;
+            border: 28px solid rgba(255, 255, 255, 0.07);
+        }
+
+        .id-school {
+            min-height: 22px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #bfe6e1;
+        }
+
+        .id-main {
+            margin-top: 22px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .avatar {
+            flex: none;
+            width: 68px;
+            height: 68px;
+            display: grid;
+            place-items: center;
+            border-radius: 16px;
+            background: var(--amber);
+            color: var(--deep);
+            font-family: "Fraunces", Georgia, serif;
+            font-size: 26px;
+            font-weight: 700;
+        }
+
+        .id-name {
+            font-family: "Fraunces", Georgia, serif;
+            font-size: 22px;
+            line-height: 1.2;
+            word-break: break-word;
+        }
+
+        .id-class { margin-top: 2px; font-size: 14px; color: #bfe6e1; }
+
+        .id-details {
+            margin-top: 24px;
+            padding-top: 18px;
+            border-top: 1px solid rgba(255, 255, 255, 0.18);
+            display: grid;
+            gap: 12px;
+            font-size: 14px;
+        }
+
+        .id-row { display: grid; grid-template-columns: 64px 1fr; gap: 10px; }
+        .id-row dt { color: #8fcfc8; }
+        .id-row dd { word-break: break-word; }
+
+        .empty { opacity: 0.45; }
+
+        .preview-note { margin-top: 12px; font-size: 12.5px; color: var(--muted); }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 900px) {
+            .layout { grid-template-columns: minmax(0, 1fr); gap: 28px; padding: 28px 18px 44px; }
+            .preview { position: static; order: -1; }
+            .id-details { display: none; }
+            .id-card { padding: 20px; }
+            .id-main { margin-top: 16px; }
+            .preview-note { display: none; }
+        }
+
+        @media (max-width: 600px) {
+            .topbar { padding: 14px 16px; }
+            form { padding: 22px 16px; border-radius: 14px; }
+            .grid { grid-template-columns: minmax(0, 1fr); }
+        }
+
+        @media (max-width: 360px) {
+            .phone select { flex-basis: 80px; padding: 0 8px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+    </style>
+</head>
+<body>
+
+    <header class="topbar">
+        <span class="brand">Student Portal</span>
+        <a href="search.html">Search student details</a>
+    </header>
+
+    <main class="layout">
+
+        <section>
+            <div class="title">
+                <h1>Register a new student</h1>
+                <p>Fill in the details below. The ID card on the side updates as you type.</p>
+            </div>
+
+            <form action="index.php" method="POST">
+
+                <fieldset>
+                    <legend>Student and school</legend>
+                    <div class="grid">
+                        <div class="field">
+                            <label for="studentname">Full name</label>
+                            <input type="text" id="studentname" name="studentname"
+                                   placeholder="e.g. Arun Kumar" autocomplete="name" required>
+                        </div>
+
+                        <div class="field">
+                            <label for="studentid">Student ID</label>
+                            <input type="text" id="studentid" name="studentid"
+                                   placeholder="e.g. ST2026001" required>
+                        </div>
+
+                        <div class="field">
+                            <label for="studentclass">Class</label>
+                            <input type="text" id="studentclass" name="studentclass"
+                                   placeholder="e.g. 10-A" required>
+                        </div>
+
+                        <div class="field">
+                            <label for="studentschoolname">School name</label>
+                            <input type="text" id="studentschoolname" name="studentschoolname"
+                                   placeholder="Enter school name" autocomplete="organization" required>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Contact</legend>
+                    <div class="grid">
+                        <div class="field full">
+                            <label for="studentemail">Email address</label>
+                            <input type="email" id="studentemail" name="studentemail"
+                                   placeholder="name@example.com" autocomplete="email" required>
+                        </div>
+
+                        <div class="field full">
+                            <label for="studentaddress">Address</label>
+                            <input type="text" id="studentaddress" name="studentaddress"
+                                   placeholder="House no, street, city" autocomplete="street-address" required>
+                        </div>
+
+                        <div class="field full">
+                            <label for="studentphone">Phone number</label>
+                            <div class="phone">
+                                <select name="studentcountrycode" id="studentcountrycode"
+                                        aria-label="Country code" required>
+                                    <option value="+91" selected>+91</option>
+                                    <option value="+1">+1</option>
+                                    <option value="+44">+44</option>
+                                </select>
+                                <input type="tel" id="studentphone" name="studentphone"
+                                       placeholder="9876543210"
+                                       pattern="[0-9]{7,15}"
+                                       title="Enter a phone number with 7 to 15 digits"
+                                       inputmode="numeric" autocomplete="tel-national" required>
+                            </div>
+                            <span class="hint">Digits only, 7 to 15 numbers.</span>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <button type="submit" class="submit">Register student</button>
+            </form>
+        </section>
+
+        <aside class="preview" aria-label="Student ID card preview">
+            <p class="preview-label">ID card preview</p>
+
+            <div class="id-card">
+                <div class="id-school" id="pvSchool">School name</div>
+
+                <div class="id-main">
+                    <div class="avatar" id="pvInitials">?</div>
+                    <div>
+                        <div class="id-name" id="pvName">Student name</div>
+                        <div class="id-class" id="pvClass">Class</div>
+                    </div>
+                </div>
+
+                <dl class="id-details">
+                    <div class="id-row"><dt>ID</dt><dd id="pvId">Student ID</dd></div>
+                    <div class="id-row"><dt>Email</dt><dd id="pvEmail">name@example.com</dd></div>
+                    <div class="id-row"><dt>Phone</dt><dd id="pvPhone">Phone number</dd></div>
+                    <div class="id-row"><dt>Address</dt><dd id="pvAddress">Address</dd></div>
+                </dl>
+            </div>
+
+            <p class="preview-note">This is only a preview. Nothing is saved until you register.</p>
+        </aside>
+
+    </main>
+
+    <script>
+        (function () {
+            var $ = function (id) { return document.getElementById(id); };
+
+            // form field -> preview element, with fallback text
+            var map = [
+                ['studentname', 'pvName', 'Student name'],
+                ['studentid', 'pvId', 'Student ID'],
+                ['studentclass', 'pvClass', 'Class'],
+                ['studentschoolname', 'pvSchool', 'School name'],
+                ['studentemail', 'pvEmail', 'name@example.com'],
+                ['studentaddress', 'pvAddress', 'Address']
+            ];
+
+            function initials(name) {
+                var parts = name.trim().split(/\s+/).filter(Boolean);
+                if (!parts.length) return '?';
+                var first = parts[0][0];
+                var last = parts.length > 1 ? parts[parts.length - 1][0] : '';
+                return (first + last).toUpperCase();
+            }
+
+            function update() {
+                map.forEach(function (m) {
+                    var value = $(m[0]).value.trim();
+                    var out = $(m[1]);
+                    out.textContent = value || m[2];
+                    out.classList.toggle('empty', !value);
+                });
+
+                var phone = $('studentphone').value.trim();
+                var phoneOut = $('pvPhone');
+                phoneOut.textContent = phone ? $('studentcountrycode').value + ' ' + phone : 'Phone number';
+                phoneOut.classList.toggle('empty', !phone);
+
+                $('pvInitials').textContent = initials($('studentname').value);
+            }
+
+            document.querySelector('form').addEventListener('input', update);
+            document.querySelector('form').addEventListener('change', update);
+            update();
+        })();
+    </script>
+
+</body>
+</html>
